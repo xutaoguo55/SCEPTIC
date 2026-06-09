@@ -1,7 +1,0 @@
-Cohort,Accession,Sample type,Platform,n_donors,n_cells_median,Disease,QC,Normalization,Layers
-Discovery (MAS/Sepsis/IBD),In-house,PBMC scRNA-seq,10x Genomics 3 v2,47,760,MAS(26)/Sepsis(12)/IBD(9),"200-6000 genes, <20% mito, >500 UMI",CP10K+log1p,L1
-SCP548,Broad SCP,PBMC scRNA-seq,10x Genomics 3 v3,65,1604,Sepsis(29)/Control(36),"200-6000 genes, <20% mito, >500 UMI",CP10K+log1p,"L1,L4,L5,L7"
-E-MTAB-10026,E-MTAB-10026,PBMC scRNA-seq,10x Genomics 5 v1,143,5655,COVID(102)/Healthy(24)/LPS(12)/Other(5),"200-6000 genes, <20% mito, >500 UMI",CP10K+log1p,"L1,L7"
-GSE65682 (MARS),GSE65682,Whole-blood microarray,Illumina HumanHT-12 v4,802,N/A (bulk),Sepsis ICU,"probe p<0.05, present >50%",RMA+quantile,L3
-Pienkos et al.,Zenodo 15199328,Plasma Olink + PBMC CyTOF,Olink Explore 384 / CyTOF,100,N/A (protein),COVID-19,NPX>LOD; live singlet,ref-bridge / arcsinh,L2
-JIA (exploratory),In-house,PBMC scRNA-seq,10x Genomics 3 v2,4,N/A (explor),JIA,"200-6000 genes, <20% mito, >500 UMI",CP10K+log1p,excluded from meta
