@@ -1,0 +1,7 @@
+__pycache__/
+*.pyc
+.DS_Store
+*.h5ad
+*.h5
+*.zip
+figures/*.tif
