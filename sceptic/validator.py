@@ -289,7 +289,17 @@ class SCEPTICValidator:
     def layer7_permutation(
         self, tf1: str, tf2: str, group_labels: Optional[np.ndarray] = None,
     ) -> LayerResult:
-        """L7: disease-label permutation test."""
+        """L7: within-group correlation concentration test.
+
+        Tests whether disease/cohort-group structure concentrates the TF-score
+        correlation beyond what is expected under random group assignment.
+
+        H0: The mean within-group |r| is no larger than under exchangeable
+            (randomly permuted) group labels.
+
+        Test statistic T = mean of absolute within-group Pearson r.
+        Permutation: group labels shuffled, within-group |r| recomputed.
+        """
         if group_labels is None:
             return LayerResult(7, "Label permutation", LayerVerdict.NA,
                                detail="No group labels provided")
@@ -298,37 +308,42 @@ class SCEPTICValidator:
             return LayerResult(7, "Label permutation", LayerVerdict.NA,
                                detail="TF not in score matrix")
 
+        groups = np.array(group_labels)
+        unique_grps = sorted(set(groups))
+        valid_grps = [g for g in unique_grps if (groups == g).sum() >= 5]
+
+        if len(valid_grps) < 2:
+            return LayerResult(7, "Label permutation", LayerVerdict.NA,
+                               detail=f"Need ≥2 groups with ≥5 samples; got {len(valid_grps)}")
+
         x = self.tf_scores[tf1].values
         y = self.tf_scores[tf2].values
-        r_obs, _ = pearsonr(x, y)
-        abs_obs = abs(r_obs)
 
-        null_vals = []
-        labels = np.array(group_labels)
-        for _ in range(self.n_perms):
-            perm = self.rng.permutation(labels)
-            # Within each permuted group, compute r
+        def _compute_T(grp_labels):
             rs = []
-            for grp in sorted(set(perm)):
-                mask = perm == grp
+            for g in valid_grps:
+                mask = grp_labels == g
                 if mask.sum() >= 5:
-                    rp, _ = pearsonr(x[mask], y[mask])
-                    rs.append(abs(rp))
-            if rs:
-                null_vals.append(np.mean(rs))
+                    r, _ = pearsonr(x[mask], y[mask])
+                    rs.append(abs(r))
+            return np.mean(rs)
 
-        null_vals = np.array(null_vals)
-        emp_p = (null_vals >= abs_obs).mean()
-        p95 = np.percentile(null_vals, 95)
+        T_obs = _compute_T(groups)
 
-        if abs_obs >= p95:
+        null_T = np.array([_compute_T(self.rng.permutation(groups))
+                           for _ in range(self.n_perms)])
+        emp_p = float((null_T >= T_obs).mean())
+        p95 = float(np.percentile(null_T, 95))
+
+        if T_obs >= p95:
             verdict = LayerVerdict.PASS
         else:
             verdict = LayerVerdict.FAIL
 
         return LayerResult(7, "Label permutation", verdict,
-                           detail=(f"|r_obs|={abs_obs:.3f}, 95th null={p95:.3f}, "
-                                   f"emp_p={emp_p:.4f}, n_perms={self.n_perms}"))
+                           detail=(f"Mean within-group |r|={T_obs:.3f}, "
+                                   f"null 95th={p95:.3f}, emp_p={emp_p:.4f}, "
+                                   f"{len(valid_grps)} groups"))
 
     # ================================================================
     # Full validation
