@@ -14,16 +14,16 @@ import re
 
 warnings.filterwarnings('ignore')
 np.random.seed(42)
-OUTDIR = '/Users/guoxutao/sc_analysis/results/literature_audit'
+OUTDIR = 'path/to/data'
 os.makedirs(OUTDIR, exist_ok=True)
 
 # ============================================================
 # 1. Load SCP548 count matrix + metadata
 # ============================================================
 print("1. Loading SCP548 data...")
-expr = pd.read_csv('/Users/guoxutao/sc_analysis/data/scp548/expression/scp_gex_matrix.csv.gz',
+expr = pd.read_csv('path/to/data',
                     index_col=0)
-meta = pd.read_csv('/Users/guoxutao/sc_analysis/data/scp548/metadata/scp_meta_updated.txt', sep='\t')
+meta = pd.read_csv('path/to/data', sep='\t')
 meta.columns = meta.columns.str.strip()
 
 # Map gene symbols
@@ -46,7 +46,7 @@ print("\n2. Loading TRRUST v2 regulons...")
 # For now, use a comprehensive set from the known TRRUST database
 
 # Try to load from file if exists
-trrust_path = '/Users/guoxutao/sc_analysis/data/trrust_rawdata.human.tsv'
+trrust_path = 'path/to/data'
 if os.path.exists(trrust_path):
     trrust = pd.read_csv(trrust_path, sep='\t', header=None,
                          names=['TF', 'target', 'mode', 'PMID'])
