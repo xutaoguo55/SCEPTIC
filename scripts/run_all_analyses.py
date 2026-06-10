@@ -91,7 +91,7 @@ LITERATURE_PAIRS = [
 
 def compute_tf_scores(expr_matrix_path, metadata_path, output_prefix,
                       gene_col='GENE', sample_col='donor_id', sep='\t',
-                      compression='gzip'):
+                      compression='auto'):
     """Compute per-sample TF target-gene mean scores from expression matrix.
 
     Parameters
@@ -113,6 +113,9 @@ def compute_tf_scores(expr_matrix_path, metadata_path, output_prefix,
         Per-sample × TF score matrix
     """
     print(f"Loading expression matrix: {expr_matrix_path}")
+    if compression == 'auto':
+        compression = 'gzip' if expr_matrix_path.endswith('.gz') else None
+
     if compression == 'gzip':
         open_func = gzip.open
     else:
@@ -122,7 +125,7 @@ def compute_tf_scores(expr_matrix_path, metadata_path, output_prefix,
     meta = pd.read_csv(metadata_path, sep=sep)
     meta.columns = meta.columns.str.strip()
     # Skip header description row if present (e.g., SCP548 has "TYPE" row)
-    if 'TYPE' in meta.iloc[0].values:
+    if not meta.empty and 'TYPE' in meta.iloc[0].values:
         meta = meta.iloc[1:]
     cell_to_donor = dict(zip(meta['NAME'] if 'NAME' in meta.columns else meta.iloc[:,0],
                              meta[sample_col]))
@@ -169,8 +172,8 @@ def compute_tf_scores(expr_matrix_path, metadata_path, output_prefix,
 
     print(f"  Matched {matched} target genes")
 
-    # Build matrix
-    expr_df = pd.DataFrame(donor_expr).T
+    # Build donor × gene matrix.
+    expr_df = pd.DataFrame(donor_expr).reindex(donors_list)
     print(f"  Donor × gene: {expr_df.shape}")
 
     # Compute TF scores
@@ -255,7 +258,7 @@ def run_l4_audit(tf_scores, output_prefix):
     result_df = pd.DataFrame(results).sort_values('abs_r', ascending=False)
 
     # Print summary
-    print(f"\n  {'TF1':<10}{'TF2':<10}{'r':>+8}{'p':>8}{'|r|':>7}{'%ile':>7}{'Verdict':<25}{'Source'}")
+    print(f"\n  {'TF1':<10}{'TF2':<10}{'r':>8}{'p':>8}{'|r|':>7}{'%ile':>7}{'Verdict':<25}{'Source'}")
     print(f"  {'-'*10}{'-'*10}{'-'*8}{'-'*8}{'-'*7}{'-'*7}{'-'*25}{'-'*30}")
     for _, row in result_df.iterrows():
         print(f"  {row['TF1']:<10}{row['TF2']:<10}{row['r']:>+8.3f}{row['p']:>8.4f}"
@@ -366,11 +369,21 @@ if __name__ == '__main__':
 
     os.makedirs(args.outdir, exist_ok=True)
 
-    if args.cohort == 'scp548':
-        # Default SCP548 paths
-        args.expr = '/Users/guoxutao/sc_analysis/data/scp548/expression/scp_gex_matrix.csv.gz'
-        args.meta = '/Users/guoxutao/sc_analysis/data/scp548/metadata/scp_meta_updated.txt'
-        print("Using default SCP548 cohort...")
+    if args.cohort == 'scp548' and (args.expr is None or args.meta is None):
+        # Default SCP548 layout used in the manuscript analysis tree. Users who
+        # clone the public code repository should pass --expr and --meta after
+        # downloading SCP548 from the Broad Single Cell Portal.
+        repo_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+        default_expr = os.path.join(repo_root, 'data/scp548/expression/scp_gex_matrix.csv.gz')
+        default_meta = os.path.join(repo_root, 'data/scp548/metadata/scp_meta_updated.txt')
+        if os.path.exists(default_expr) and os.path.exists(default_meta):
+            args.expr = args.expr or default_expr
+            args.meta = args.meta or default_meta
+            print("Using local SCP548 files under ./data/scp548...")
+        else:
+            print("SCP548 data were not found under ./data/scp548.")
+            print("Download the expression matrix and metadata from SCP548, then rerun with:")
+            print("  python scripts/run_all_analyses.py --cohort scp548 --expr <matrix.csv.gz> --meta <metadata.tsv> --outdir ./results")
 
     if args.expr is None or args.meta is None:
         print("ERROR: --expr and --meta required (or --cohort scp548 for defaults)")

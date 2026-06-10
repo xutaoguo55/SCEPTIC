@@ -1,0 +1,11 @@
+id,item,layer,minimum_standard
+S1,Report scoring methods and whether direction is stable across methods,L1,required for TF-score co-expression claims
+S2,"Report regulon database, download/version date, target genes, expressed gene universe, and missing targets",L1/L4,required
+S3,Provide per-sample TF scores and sample metadata used for correlations,All,required for computational reproducibility
+S4,Compare observed TF-pair correlation against an empirical TF-pair null,L4,required for pair-specificity claims
+S5,"Define the multiple-testing family and report nominal p, empirical p, FDR where applicable, effect size, and CI",All,required
+S6,State whether repeated timepoints exist and avoid treating repeated samples as independent donors unless modeled,All,required metadata check
+S7,Report cell-type composition adjustment or explicitly state why it was unavailable,L5,recommended
+S8,"Report independent cohort, bulk-context, or cross-assay evidence when available; label missing layers as limitations",L2/L3/L6,recommended
+S9,"For label permutation, define the exchangeability assumption and biological null hypothesis",L7,recommended
+S10,"Provide code environment, one-command/example run, random seeds, and expected outputs",Reproducibility,required for repository release

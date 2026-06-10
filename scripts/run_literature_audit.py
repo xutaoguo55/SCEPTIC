@@ -276,7 +276,7 @@ hctl_pairs = result_df[result_df['Source'].str.contains('HCTL')]
 lit_pairs_only = result_df[~result_df['Source'].str.contains('HCTL')]
 
 print(f"\nLiterature-established TF pairs (n={len(lit_pairs_only)}):")
-print(f"  Pass L4 (top 5%):  {(lit_pairs_only['L4_Verdict'].str.contains('PASS \(top').sum())}")
+print(f"  Pass L4 (top 5%):  {(lit_pairs_only['L4_Verdict'].str.contains('PASS (top', regex=False).sum())}")
 print(f"  Marginal (top 25%): {(lit_pairs_only['L4_Verdict'].str.contains('Marginal').sum())}")
 print(f"  Fail:               {(lit_pairs_only['L4_Verdict'].str.contains('FAIL').sum())}")
 
@@ -285,7 +285,7 @@ for _, row in hctl_pairs.iterrows():
     print(f"  {row['TF1']}-{row['TF2']}: r={row['r']:.3f}, percentile={row['Percentile']:.1f}%, {row['L4_Verdict']}")
 
 print(f"\nKey finding for paper:")
-n_pass = (lit_pairs_only['L4_Verdict'].str.contains('PASS \(top').sum()) + \
+n_pass = (lit_pairs_only['L4_Verdict'].str.contains('PASS (top', regex=False).sum()) + \
          (lit_pairs_only['L4_Verdict'].str.contains('Marginal').sum())
 n_total = len(lit_pairs_only)
 print(f"  Only {n_pass}/{n_total} literature-established TF pairs show specific co-variation")

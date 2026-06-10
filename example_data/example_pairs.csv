@@ -1,0 +1,10 @@
+TF1,TF2,Source
+STAT1,IRF1,JAK-STAT/IFN; Darnell Science 1997
+RUNX1,ETS1,T cell development; Taniuchi Cell 2002
+FOS,JUN,AP-1 complex; Angel BBA 1991
+NR3C1,NFKB1,GR-NFkB crosstalk; Caldenhoven 1995
+NFKB1,RELA,NF-kB canonical; Hayden Cell 2008
+IRF4,BATF,Tfh differentiation; Murphy Nat Rev Immunol 2013
+STAT4,NFKB1,HCTL triad; this study
+NFKB1,GATA1,HCTL triad (artifact test)
+BCL6,PRDM1,GC B cell; Crotty Annu Rev Immunol 2010

@@ -1,0 +1,40 @@
+cff-version: 1.2.0
+message: "If you use SCEPTIC, please cite the manuscript and this software archive."
+title: "SCEPTIC: a multi-layer null-control framework for validating single-cell transcription factor co-expression claims"
+authors:
+  - family-names: Wei
+    given-names: Xiaolei
+  - family-names: Zheng
+    given-names: Haiqing
+  - family-names: Jiang
+    given-names: Hongbing
+  - family-names: Huang
+    given-names: Junwei
+  - family-names: Wei
+    given-names: Qi
+  - family-names: Wei
+    given-names: Yongqiang
+  - family-names: Feng
+    given-names: Ru
+  - family-names: Guo
+    given-names: Xutao
+    orcid: "https://orcid.org/0000-0001-6191-2204"
+repository-code: "https://github.com/xutaoguo55/SCEPTIC"
+license: MIT
+version: "1.0.0"
+date-released: "2026-06-09"
+preferred-citation:
+  type: article
+  title: "SCEPTIC: a multi-layer null-control framework for validating single-cell transcription factor co-expression claims"
+  authors:
+    - family-names: Wei
+      given-names: Xiaolei
+    - family-names: Zheng
+      given-names: Haiqing
+    - family-names: Jiang
+      given-names: Hongbing
+    - family-names: Guo
+      given-names: Xutao
+      orcid: "https://orcid.org/0000-0001-6191-2204"
+  year: 2026
+  journal: "Cell Reports Methods (submitted)"

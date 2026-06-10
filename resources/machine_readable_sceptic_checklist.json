@@ -1,0 +1,64 @@
+{
+  "checklist": [
+    {
+      "id": "S1",
+      "item": "Report scoring methods and whether direction is stable across methods",
+      "layer": "L1",
+      "minimum_standard": "required for TF-score co-expression claims"
+    },
+    {
+      "id": "S2",
+      "item": "Report regulon database, download/version date, target genes, expressed gene universe, and missing targets",
+      "layer": "L1/L4",
+      "minimum_standard": "required"
+    },
+    {
+      "id": "S3",
+      "item": "Provide per-sample TF scores and sample metadata used for correlations",
+      "layer": "All",
+      "minimum_standard": "required for computational reproducibility"
+    },
+    {
+      "id": "S4",
+      "item": "Compare observed TF-pair correlation against an empirical TF-pair null",
+      "layer": "L4",
+      "minimum_standard": "required for pair-specificity claims"
+    },
+    {
+      "id": "S5",
+      "item": "Define the multiple-testing family and report nominal p, empirical p, FDR where applicable, effect size, and CI",
+      "layer": "All",
+      "minimum_standard": "required"
+    },
+    {
+      "id": "S6",
+      "item": "State whether repeated timepoints exist and avoid treating repeated samples as independent donors unless modeled",
+      "layer": "All",
+      "minimum_standard": "required metadata check"
+    },
+    {
+      "id": "S7",
+      "item": "Report cell-type composition adjustment or explicitly state why it was unavailable",
+      "layer": "L5",
+      "minimum_standard": "recommended"
+    },
+    {
+      "id": "S8",
+      "item": "Report independent cohort, bulk-context, or cross-assay evidence when available; label missing layers as limitations",
+      "layer": "L2/L3/L6",
+      "minimum_standard": "recommended"
+    },
+    {
+      "id": "S9",
+      "item": "For label permutation, define the exchangeability assumption and biological null hypothesis",
+      "layer": "L7",
+      "minimum_standard": "recommended"
+    },
+    {
+      "id": "S10",
+      "item": "Provide code environment, one-command/example run, random seeds, and expected outputs",
+      "layer": "Reproducibility",
+      "minimum_standard": "required for repository release"
+    }
+  ]
+}
